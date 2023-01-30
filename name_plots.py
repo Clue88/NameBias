@@ -34,8 +34,14 @@ def add_racebert_predictions(pickle_path: str, dest: str):
     Adds RaceBERT predictions to combined PILE and FL data.
     """
     df = pd.read_pickle(pickle_path)
+    df["first_letter"] = df.name.apply(lambda x: x[0])
     model = racebert.RaceBERT()
-    df["pred_race"] = df.name.apply(lambda x: model.predict_race(x)[0]["label"])
+    df["pred_race"].fillna(
+        value=df[df.first_letter == "A"][df.is_first_name == "T"].name.apply(
+            lambda x: model.predict_race(x)[0]["label"]
+        ),
+        inplace=True,
+    )
     df.to_pickle(dest)
 
 
@@ -51,7 +57,9 @@ def create_frequency_plot(pickle_path: str):
     # df[df.is_first_name == "T"].sort_values("frequency_FL_corpus", ascending=False).reset_index(drop=True).plot(y="count", loglog=True)
     # df[df.is_last_name == "T"].sort_values("frequency_FL_corpus", ascending=False).reset_index(drop=True).plot(y="count", loglog=True)
     # df[df.is_full_name == "T"].sort_values("frequency_FL_corpus", ascending=False).reset_index(drop=True).plot(y="count", loglog=True)
-    df.sort_values("frequency_FL_corpus", ascending=False).reset_index(drop=True).plot(y="count", loglog=True)
+    df.sort_values("frequency_FL_corpus", ascending=False).reset_index(drop=True).plot(
+        y="count", loglog=True
+    )
     plt.show()
 
 
@@ -62,5 +70,7 @@ if __name__ == "__main__":
     COMBINED_RACE_PICKLE_PATH = "pickles/combined_race.pickle"
 
     # combine_pile_fl_data(PILE_PICKLE_PATH, FL_PICKLE_PATH, "pickles/combined.pickle")
-    add_racebert_predictions(COMBINED_PICKLE_PATH, COMBINED_RACE_PICKLE_PATH)
+    # add_racebert_predictions(COMBINED_PICKLE_PATH, COMBINED_RACE_PICKLE_PATH)
     # create_frequency_plot(COMBINED_PICKLE_PATH)
+
+    add_racebert_predictions(COMBINED_RACE_PICKLE_PATH, COMBINED_RACE_PICKLE_PATH)
