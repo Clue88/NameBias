@@ -132,3 +132,5 @@ dmypy.json
 *.csv
 pile_counts/
 pile/
+pickles/
+fl_data/
