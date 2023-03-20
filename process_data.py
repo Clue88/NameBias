@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import racebert
 
@@ -40,8 +42,49 @@ def add_racebert_predictions(pickle_path: str, dest: str):
     df.to_pickle(dest)
 
 
+def reformat_dataframe(pickle_path: str, dest: str):
+    """
+    Renames columns and cleans up the data.
+    """
+    df = pd.read_pickle(pickle_path)
+    df.rename(columns={"count": "frequency_pile"}, inplace=True)
+    df.drop(
+        columns=[
+            "first_letter",
+            "frequency_text_corpus",
+            "frequency_unknown",
+            "frequency_not_reported",
+            "frequency_aian",
+            "frequency_api",
+            "frequency_hispanic",
+            "frequency_nh_black",
+            "frequency_nh_white",
+            "corpus_subset",
+        ],
+        inplace=True,
+    )
+    colors = {
+        "nh_white": "red",
+        "nh_black": "blue",
+        "hispanic": "green",
+        "api": "magenta",
+        "aian": "black",
+    }
+    df["color"] = df["pred_race"].apply(lambda x: colors[x])
+
+    df["frequency_pile_rounded"] = df["frequency_pile"].apply(
+        lambda x: 0 if x == 0 else round(2 ** round(math.log(x, 2)))
+    )
+    df["frequency_FL_rounded"] = df["frequency_FL_corpus"].apply(
+        lambda x: 0 if x == 0 else round(2 ** round(math.log(x, 2)))
+    )
+    df["sex"] = df.apply(
+        lambda x: "M" if x["frequency_male"] >= x["frequency_female"] else "F", axis=1
+    )
+
+    df.to_pickle(dest)
+
+
 if __name__ == "__main__":
-    PILE_PICKLE_PATH = "pickles/pile_data.pickle"
-    FL_PICKLE_PATH = "pickles/fl_data.pickle"
-    COMBINED_PICKLE_PATH = "pickles/combined.pickle"
-    COMBINED_RACE_PICKLE_PATH = "pickles/combined_race.pickle"
+    PICKLE_PATH = "pickles/new_combined_race.pickle"
+    reformat_dataframe(PICKLE_PATH, "pickles/full_cleaned.pickle")
