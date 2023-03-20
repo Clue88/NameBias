@@ -81,7 +81,8 @@ def reformat_dataframe(pickle_path: str, dest: str):
         lambda x: 0 if x == 0 else round(2 ** round(math.log(x, 2)))
     )
     df["sex"] = df.apply(
-        lambda x: "male" if x["frequency_male"] >= x["frequency_female"] else "female", axis=1
+        lambda x: "male" if x["frequency_male"] >= x["frequency_female"] else "female",
+        axis=1,
     )
 
     df.to_pickle(dest)
