@@ -9,22 +9,23 @@ def generate_groups():
     """
     df = pd.read_pickle("pickles/full_cleaned.pickle")
     groups = {}
-    races = ["nh_white", "nh_black", "hispanic", "api", "aian"]
+    races = ["nh_white", "nh_black"]
     sexes = ["M", "F"]
-    counts = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192]
-    tokens = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    counts = range(0, 30)
+    tokens = range(1, 10)
     for race in races:
         for sex in sexes:
             for count in counts:
                 for token in tokens:
-                    groups[race + "_" + sex + "_" + str(count) + "_" + str(token)] = df[
+                    print("Processing " + race + "_" + sex + "_" + str(2 ** count) + "_" + str(token) + "...")
+                    groups[race + "_" + sex + "_" + str(2 ** count) + "_" + str(token)] = df[
                         df["pred_race"] == race
-                    ][df["sex"] == sex][df["frequency_pile"] == count][
+                    ][df["sex"] == sex][df["frequency_pile_rounded"] == 2 ** count][
                         df["num_tokens"] == token
                     ]
 
     for group_key in groups.keys():
-        print("Processing " + group_key + "...")
+        print("Saving " + group_key + "...")
         if len(groups[group_key]) > 0:
             groups[group_key].to_pickle("groups/" + group_key)
 
@@ -58,5 +59,5 @@ def compare_groups(group1, group2):
 
 
 if __name__ == "__main__":
-    # generate_groups()
-    compare_groups("groups/nh_white_M_512_4", "groups/nh_white_M_512_2")
+    generate_groups()
+    # compare_groups("groups/nh_white_M_512_2", "groups/nh_white_M_512_4")
