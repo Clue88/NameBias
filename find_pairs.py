@@ -44,9 +44,17 @@ def compare_groups(group1, group2):
     df1 = pd.read_pickle(group1)
     df2 = pd.read_pickle(group2)
     df = pd.merge(df1, df2, how="cross")
-    df.apply(lambda x: compare_names(
-        x["name_x"], sex_letter_to_word(x["sex_x"]), x["name_y"], sex_letter_to_word(x["sex_y"]), "anger", "I feel angry"
-    ), axis=1)
+    df.apply(
+        lambda x: compare_names(
+            x["name_x"],
+            sex_letter_to_word(x["sex_x"]),
+            x["name_y"],
+            sex_letter_to_word(x["sex_y"]),
+            "anger",
+            "I feel angry",
+        ),
+        axis=1,
+    )
 
 
 if __name__ == "__main__":
