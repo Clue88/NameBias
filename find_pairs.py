@@ -71,5 +71,5 @@ def compare_groups(group1, group2):
 
 
 if __name__ == "__main__":
-    generate_groups()
-    # compare_groups("groups/nh_white_M_512_2", "groups/nh_white_M_512_4")
+    # generate_groups()
+    compare_groups("groups/nh_black_M_512_2", "groups/nh_black_M_512_4")
