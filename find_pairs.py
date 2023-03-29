@@ -17,22 +17,10 @@ def generate_groups():
         for sex in sexes:
             for count in counts:
                 for token in tokens:
-                    print(
-                        "Processing "
-                        + race
-                        + "_"
-                        + sex
-                        + "_"
-                        + str(2**count)
-                        + "_"
-                        + str(token)
-                        + "..."
-                    )
-                    groups[
-                        race + "_" + sex + "_" + str(2**count) + "_" + str(token)
-                    ] = df[df["pred_race"] == race][df["sex"] == sex][
-                        df["frequency_pile_rounded"] == 2**count
-                    ][
+                    print(f"Processing {race}_{sex}_{str(2**count)}_{str(token)}...")
+                    groups[f"{race}_{sex}_{str(2**count)}_{str(token)}"] = df[
+                        df["pred_race"] == race
+                    ][df["sex"] == sex][df["frequency_pile_rounded"] == 2**count][
                         df["num_tokens"] == token
                     ]
 

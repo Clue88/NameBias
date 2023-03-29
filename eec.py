@@ -100,11 +100,11 @@ def compare_single_name(name, sex, emotion, ref):
     for a in n:
         s1, _ = cos_sim_raw_sent_emb(reference_sent, a, ref)
         n_sim.append(s1)
-    return np.average(n_sim)
+    return n_sim
 
 
 if __name__ == "__main__":
     compare_names("Candido", "male", "Athanasios", "male", "anger", "I feel angry")
-    print(compare_single_name("Athanasios", "male", "anger", "I feel angry"))
+    # print(compare_single_name("Athanasios", "male", "anger", "I feel angry"))
 
 # df[df["is_first_name"] == "T"][(df["pred_race"] == "nh_white") | (df["pred_race"] == "nh_black")][df["frequency_male"] > 10][df["frequency_pile"] > 14000][df["frequency_pile"] < 16000][df["num_tokens"] == 4]
