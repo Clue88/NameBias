@@ -8,7 +8,7 @@ import torch
 
 
 EMBEDDING = BertEmbeddings("bert-large-uncased")
-EEC = pd.read_csv("Equity-Evaluation-Corpus.csv", header=0)
+EEC = pd.read_csv("data/Equity-Evaluation-Corpus.csv", header=0)
 
 
 def sent_emb(sent):
@@ -49,17 +49,17 @@ def cos_sim_raw_sent_emb(ref_sen_emb, sent1, sent2):
     return proj1, proj2
 
 
-def embed_name(name, gender_identity, emotion):
+def get_eec_sentences(name, gender_identity, emotion):
     """
     Embeds a name with a given gender identity and emotion.
     """
-    if gender_identity == "male":
+    if gender_identity == "M":
         sentences = (
             EEC[(EEC.Person == "Alonzo") & (EEC.Emotion == emotion)]
             .Sentence.str.replace("Alonzo", name)
             .tolist()
         )
-    elif gender_identity == "female":
+    elif gender_identity == "F":
         sentences = (
             EEC[(EEC.Person == "Katie") & (EEC.Emotion == emotion)]
             .Sentence.str.replace("Katie", name)
@@ -69,11 +69,11 @@ def embed_name(name, gender_identity, emotion):
 
 
 def compare_names(name1, sex1, name2, sex2, emotion, ref):
-    n1 = embed_name(name1, sex1, emotion)
-    n2 = embed_name(name2, sex2, emotion)
+    n1 = get_eec_sentences(name1, sex1, emotion)
+    n2 = get_eec_sentences(name2, sex2, emotion)
 
     reference_sent = sent_emb(ref)
-
+ 
     n1_sim = []
     n2_sim = []
     for a, b in zip(n1, n2):
@@ -94,7 +94,7 @@ def compare_names(name1, sex1, name2, sex2, emotion, ref):
 
 
 def compare_single_name(name, sex, emotion, ref):
-    n = embed_name(name, sex, emotion)
+    sents = get_eec_sentences(name, sex, emotion)
     reference_sent = sent_emb(ref)
     n_sim = []
     for a in n:
