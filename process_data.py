@@ -3,8 +3,6 @@ import math
 import pandas as pd
 import racebert
 
-from eec import compare_single_name
-
 
 def fl_data_to_pickle(csv_path: str, dest: str):
     """
@@ -80,24 +78,24 @@ def reformat_dataframe(pickle_path: str, dest: str):
     df["frequency_FL_rounded"] = df["frequency_FL_corpus"].apply(
         lambda x: 0 if x == 0 else round(2 ** round(math.log(x, 2)))
     )
-    df["sex"] = df.apply(
-        lambda x: "male" if x["frequency_male"] >= x["frequency_female"] else "female",
-        axis=1,
-    )
 
     df.to_pickle(dest)
 
 
-def add_eec_similarity(pickle_path: str, dest: str):
-    df = pd.read_pickle(pickle_path)
-    df["ref_sim"] = df.apply(
-        lambda x: compare_single_name(x["name"], x["sex"], "anger", "I feel angry"),
-        axis=1,
-    )
+def add_multiple_gender_duplicates(pickle_path: str, dest: str):
+    df_male = pd.read_pickle(pickle_path)
+    df_male["sex"] = "male"
+
+    df_female = df_male.copy()
+    df_female["sex"] = "female"
+
+    df_male = df_male[df_male["frequency_male"] > 0]
+    df_female = df_female[df_female["frequency_female"] > 0]
+
+    df = pd.concat([df_male, df_female])
+    df.sort_values(by="name", inplace=True)
     df.to_pickle(dest)
 
 
 if __name__ == "__main__":
-    PICKLE_PATH = "pickles/new_combined_race.pickle"
-    # reformat_dataframe(PICKLE_PATH, "pickles/full_cleaned.pickle")
-    add_eec_similarity("pickles/full_cleaned.pickle", "pickles/new.pickle")
+    pass
