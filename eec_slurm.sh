@@ -7,7 +7,7 @@
 # use current working directory
 #$ -cwd
 
-#$ -pe parallel-onenode 4
+#$ -pe parallel-onenode 64
 
 # interpret using BASH shell
 #$ -S /bin/bash

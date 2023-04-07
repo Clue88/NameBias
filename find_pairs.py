@@ -20,7 +20,7 @@ def generate_groups():
                     print(f"Processing {race}_{sex}_{str(2**count)}_{str(token)}...")
                     groups[f"{race}_{sex}_{str(2**count)}_{str(token)}"] = df[
                         df["pred_race"] == race
-                    ][df["sex"] == sex][df["frequency_pile_rounded"] == 2**count][
+                    ][df["sex"] == sex][df["frequency_pile_rounded"] == 2 ** count][
                         df["num_tokens"] == token
                     ]
 
