@@ -1,14 +1,30 @@
 #!/bin/bash
 
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --array=0-100
-#SBATCH --cpus-per-task=2
-#SBATCH --time=8:00:00
-#SBATCH --mem=8g
-#SBATCH --job-name=eec
-#SBATCH --mail-type=END
-#SBATCH --mail-user=liuchris@seas.upenn.edu
-#SBATCH --output=slurm_out/eec%a.out
+# name of job
+# man 1 qsub
+#$ -N eec
 
-srun python3 eec_similarity.py
+# use current working directory
+#$ -cwd
+
+#$ -pe parallel-onenode 4
+
+# interpret using BASH shell
+#$ -S /bin/bash
+
+# join standard error and standard output of script into job_name.ojob_id
+#$ -j y -o eec_output
+
+# export environment variables to job
+#$ -V
+
+# when am I running
+/bin/date
+
+# where am I running
+/bin/hostname
+
+# what environment variables are available to this job script, e.g. $JOB_ID
+/usr/bin/env
+
+python eec_similarity.py -t 100
