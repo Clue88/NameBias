@@ -3,6 +3,8 @@ import math
 import pandas as pd
 import racebert
 
+from eec import embed_name
+
 
 def fl_data_to_pickle(csv_path: str, dest: str):
     """
@@ -97,5 +99,13 @@ def add_multiple_gender_duplicates(pickle_path: str, dest: str):
     df.to_pickle(dest)
 
 
+def get_text_to_embed(pickle_path: str, dest: str):
+    df = pd.read_pickle(pickle_path)
+    num_rows = df.shape[0]
+    with open(dest, "a") as file:
+        for index, row in df.iterrows():
+            print(f"Processing {index + 1} of {num_rows} ({100 * (index + 1) / num_rows}%)...")
+            file.writelines(s + "\n" for s in embed_name(row["name"], row["sex"], "fear"))
+
 if __name__ == "__main__":
-    pass
+    get_text_to_embed("pickles/new.pickle", "embeddings_fear.txt")
