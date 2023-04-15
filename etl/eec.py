@@ -73,7 +73,6 @@ def compare_names(name1, sex1, name2, sex2, emotion, ref):
     n2 = get_eec_sentences(name2, sex2, emotion)
 
     reference_sent = sent_emb(ref)
- 
     n1_sim = []
     n2_sim = []
     for a, b in zip(n1, n2):
@@ -93,18 +92,5 @@ def compare_names(name1, sex1, name2, sex2, emotion, ref):
     )
 
 
-def compare_single_name(name, sex, emotion, ref):
-    sents = get_eec_sentences(name, sex, emotion)
-    reference_sent = sent_emb(ref)
-    n_sim = []
-    for a in n:
-        s1, _ = cos_sim_raw_sent_emb(reference_sent, a, ref)
-        n_sim.append(s1)
-    return n_sim
-
-
 if __name__ == "__main__":
     compare_names("Candido", "male", "Athanasios", "male", "anger", "I feel angry")
-    # print(compare_single_name("Athanasios", "male", "anger", "I feel angry"))
-
-# df[df["is_first_name"] == "T"][(df["pred_race"] == "nh_white") | (df["pred_race"] == "nh_black")][df["frequency_male"] > 10][df["frequency_pile"] > 14000][df["frequency_pile"] < 16000][df["num_tokens"] == 4]
