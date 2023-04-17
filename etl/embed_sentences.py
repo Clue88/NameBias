@@ -18,4 +18,4 @@ if __name__ == "__main__":
     df = pd.read_parquet("embeddings_sadness.parquet")
     df = df.head(1000)
     df["embedding"] = df["sentence"].apply(lambda x: embed_sentence(x))
-    df.to_parquet("embeddings_sadness_new.parquet")
+    # df.to_parquet("embeddings_sadness_new.parquet")
