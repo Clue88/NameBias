@@ -5,7 +5,7 @@
 #SBATCH --gpus=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=120:00
-#SBATCH --mem=1000GB
+#SBATCH --mem=256GB
 #SBATCH -D /nlp/data/liuchris/NameBias/
 
 python3 etl/embed_sentences.py
