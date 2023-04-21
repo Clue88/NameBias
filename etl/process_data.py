@@ -82,5 +82,54 @@ def reformat_dataframe(pickle_path: str, dest: str):
     df.to_pickle(dest)
 
 
+def add_gender_race_frequencies(parquet_path: str, dest: str):
+    """
+    Adds gender-race frequencies for full names and nh_black and nh_white
+    names only.
+    """
+    df = pd.read_parquet(parquet_path)
+    fl = pd.read_csv("data/names.csv")
+    fl["full_name"] = fl.apply(lambda x: x["first_name"] + " " + x["last_name"], axis=1)
+    fl = fl[(fl["race"] == "nh_black") | (fl["race"] == "nh_white")]
+
+    df["nh_black_male_freq"] = df.apply(
+        lambda x: len(
+            fl[fl["full_name"] == x["name"]][fl["sex"] == "M"][fl["race"] == "nh_black"]
+        )
+        if x["is_full_name"] == "T"
+        else 0,
+        axis=1,
+    )
+
+    df["nh_black_female_freq"] = df.apply(
+        lambda x: len(
+            fl[fl["full_name"] == x["name"]][fl["sex"] == "F"][fl["race"] == "nh_black"]
+        )
+        if x["is_full_name"] == "T"
+        else 0,
+        axis=1,
+    )
+
+    df["nh_white_male_freq"] = df.apply(
+        lambda x: len(
+            fl[fl["full_name"] == x["name"]][fl["sex"] == "M"][fl["race"] == "nh_white"]
+        )
+        if x["is_full_name"] == "T"
+        else 0,
+        axis=1,
+    )
+
+    df["nh_white_female_freq"] = df.apply(
+        lambda x: len(
+            fl[fl["full_name"] == x["name"]][fl["sex"] == "F"][fl["race"] == "nh_white"]
+        )
+        if x["is_full_name"] == "T"
+        else 0,
+        axis=1,
+    )
+
+    df.to_parquet(dest)
+
+
 if __name__ == "__main__":
-    pass
+    add_gender_race_frequencies("data/names.parquet", "data/new.parquet")

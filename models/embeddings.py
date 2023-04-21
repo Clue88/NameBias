@@ -86,6 +86,7 @@ def create_write_buffer():
     }
     return buffer_obj
 
+
 def create_df_from_buffer(write_buffer):
     """
     create dataframe from write buffer
@@ -99,6 +100,7 @@ def create_df_from_buffer(write_buffer):
         }
     )
     return df
+
 
 write_buffer = create_write_buffer()
 part_num = 0
