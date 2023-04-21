@@ -1,7 +1,6 @@
 import pandas as pd
-from numba import njit, jit
+from numba import jit
 import numpy as np
-import dask.dataframe as da
 
 EMOTION = "anger"
 N_CHUNKS = 4
