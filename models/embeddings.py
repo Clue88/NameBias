@@ -69,8 +69,12 @@ def mean_pooling(model_output, attention_mask):
     mean pooling of tokens, taking into account attention mask
     """
     # see https://www.sbert.net/examples/applications/computing-embeddings/README.html#sentence-embeddings-with-transformers
-    token_embeddings = model_output[0]  # First element of model_output contains all token embeddings
-    input_mask_expanded = (attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float())
+    token_embeddings = model_output[
+        0
+    ]  # First element of model_output contains all token embeddings
+    input_mask_expanded = (
+        attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    )
     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
     return sum_embeddings / sum_mask
@@ -87,6 +91,7 @@ def create_write_buffer():
         "sentence_idx": [],
     }
 
+
 def create_df_from_buffer(write_buffer):
     """
     create dataframe from write buffer
@@ -100,6 +105,7 @@ def create_df_from_buffer(write_buffer):
         }
     )
     return df
+
 
 write_buffer = create_write_buffer()
 part_num = 0
