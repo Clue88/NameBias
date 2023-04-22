@@ -14,7 +14,7 @@ import numpy as np
 from models.utils import mean_pooling
 
 # params
-EMOTION = "anger"
+EMOTION = "reference"
 MODEL_NAME = "roberta-base"
 BATCH_SIZE = 128
 
